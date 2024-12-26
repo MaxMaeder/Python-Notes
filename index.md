@@ -38,7 +38,7 @@ class MyClass:
   i = 123 # class attribute (shared between instances)
 
   def __init__(self, foo): # constructor
-      self.data = [foo] # Instance attribute
+    self.data = [foo] # Instance attribute
 
   def f(self): # method
     return self.data
@@ -136,11 +136,11 @@ def do_something():
 - 'Protected' attributes/methods are declared `_like_this`
 - 'Public' attributes/methods are declared `like_this`
 
-## Polymorphism, Inheritance, and Typing
-### Typing
+## Typing and Polymorphism
+### Type System
 - Python uses **duck typing**: where an object is considered compatible with a given type if it has all the methods and attributes that the type requires
   - Example: anything can be iterated over as long as it implements 2 required methods
-- We can give arguments, return values, and attributes **type hints** to improve readability and allow for some static type checking/better intellisense
+- We can give arguments, return values, variables, and attributes **type hints** to improve readability and allow for some static type checking/better intellisense
   - These hints don't actually *do anything* at runtime
 
 Example: adding type hints to a function's arguments & return value:
@@ -154,10 +154,126 @@ Example: adding type hints to an attribute:
 
 ```python
 def __init__(self):
-
+  self.event_start: datetime | None = None
 ```
 
-#### Protocols
+### Inheritance
+Example: deriving a class from a parent and overriding a method:
+
+```python
+class Shape:
+  def say_hi(self):
+    return "Hi i'm a shape"
+
+class Circle(Shape):
+  def greet(self):
+    return "Hi, i'm a circle"
+```
+
+Example: deriving a class from multiple parents:
+
+```python
+class Shape:
+  def say_name(self):
+    return "Shape"
+
+class Polygon(Shape):
+  def say_name(self):
+    return "Polygon"
+
+class Opaque:
+  def say_name(self):
+    return "Opaque"
+
+class Circle(Polygon, Opaque):
+  def greet(self):
+    return f"Hi, i'm {super().say_name()}" # Returns: Hi, i'm Polygon
+```
+
+#### Method resolution order: why 'polygon' was returned
+- When `super().say_name()` is called, Python follows the MRO to locate the next class to implement `say_name` and calls it
+  - It finds the next class to implement a method by returning a *Proxy Object* that we call the method on (details left out)
+- The MRO is computed using C3 linearization, which is essentially DFS
+- To get the MRO, you can call `Class.mro()`
+  - In our example: `Circle.mro()` returns:
+
+```  
+[
+  <class '__main__.Circle'>, 
+  <class '__main__.Polygon'>, 
+  <class '__main__.Shape'>, 
+  <class '__main__.Opaque'>, 
+  <class 'object'>
+]
+```
+
+- MRO and class initialization
+  - Like other OOP languages, a subclass is expected to call a parent's constructor in it's constructor
+  - Nuance: since method resolution follows a DFS ordering, a class which doesn't inherit from anything might still be required to call `super().__init__()`
+    - For an example see `Shape` in the above code snippet
+    - This obviously can get confusing, solution is to just not do fancy things with inheritance
+
+### Abstract Base Classes (ABCs)
+- ABCs are classes designed to be subclassed, but not directly instantiated
+  - They must subclass `ABC`
+- If a method must be overridden in a subclass, it must be decorated with `@abstractmethod`
+  - If a class is instantiated with abstract methods that have not been overridden, an error is raised
+  - An ABC can define attributes that must be implemented by marking it's getter with `@abstractmethod`
+
+Example ABC:
+
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+  @property
+  @abstractmethod
+  def side_length(self) -> int:
+    pass
+
+  @abstractmethod
+  def get_area(self) -> int:
+    pass
+
+class Square(Shape):
+  def __init__(self, side_length) -> None:
+    self._side_length = side_length
+
+  def side_length(self) -> int:
+    return self._side_length
+
+  def get_area(self) -> int:
+    return self._side_length ** 2
+```
+
+### Protocols
+- Protocols let you use duck typing with Python's type hints system
+  - You define a protocol with some methods/attributes with ellipsis (`...`) as their body
+  - You use a protocol as a type hint
+  - You gain static type checking that the object passed to the argument (for example) with the type hint has the methods/attributes defined in the protocol
+- Unlike ABCs, protocols don't enforce a strict class hierarchy: as long as the object has the required methods/attributes it works
+
+Example protocol:
+
+```python
+class MyProtocol(Protocol):
+  instance_attr: str         # Instance attribute
+  class_attr: ClassVar[int]  # Class attribute
+
+  def method(self) -> None:
+    ...
+
+class ConformingClass:
+  class_attr = 42
+
+  def __init__(self):
+    self.instance_attr = "Hello"
+  
+  def method(self) -> None:
+    print(self.instance_attr)
+
+example: MyProtocol = ConformingClass()
+```
 
 ## Errors
 
@@ -194,13 +310,13 @@ import unittest
 
 class TestStatisticalFunctions(unittest.TestCase):
 
-    def test_average(self):
-        self.assertEqual(40.0, average([20, 30, 70]))
-        self.assertEqual(4.3, round(average([1, 5, 7]), 1))
-        with self.assertRaises(ZeroDivisionError):
-            average([])
-        with self.assertRaises(TypeError):
-            average(20, 30, 70)
+  def test_average(self):
+    self.assertEqual(40.0, average([20, 30, 70]))
+    self.assertEqual(4.3, round(average([1, 5, 7]), 1))
+    with self.assertRaises(ZeroDivisionError):
+      average([])
+    with self.assertRaises(TypeError):
+      average(20, 30, 70)
 
 if __name__ == "__main__":
   unittest.main()

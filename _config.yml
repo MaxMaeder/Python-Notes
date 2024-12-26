@@ -33,6 +33,7 @@ minima:
   skin: dark
 
 header_pages:
+  - index.md
 
 # Exclude from processing.
 # The following items will not be processed, by default.

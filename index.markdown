@@ -1,3 +1,10 @@
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+
+layout: home
+---
+
 ## Functions
 - Functions can be declared within each other
 - By convention functions are declared before they are used

@@ -21,9 +21,14 @@
 title: Max's Python Notes
 email: max@mmaeder.com
 description: >- # this means to ignore newlines until "baseurl:"
-  My Notes
+  My notes from learning python thus far.
 baseurl: "/Python-Notes" # the subpath of your site, e.g. /blog
 url: "https://maxmaeder.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+header_pages:
+
+minima:
+  skin: dark
 
 # Build settings
 theme: minima

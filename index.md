@@ -30,6 +30,7 @@ title: Notes
 
 ## Classes
 ### Class Basics
+
 ```python
 class MyClass:
   """A simple example class""" # docstring, accessible with MyClass.__doc__
@@ -70,6 +71,7 @@ print(x.f())
 ### Method Decorators
 - We can use the `@property` decorator to make getters and setters that appear like normal attributes of a class:
   - This way, we can put custom logic in them 
+
 ```python
 @property
 def name(self):
@@ -83,6 +85,7 @@ def name(self, value):
 - We can use the `@classmethod` decorator to define a method which operates on the class, versus an *instance of the class*
   - The class will always be passed as the first argument (as opposed to the instance)
   - This is regardless of whether it is called on the class itself or an instance of the class, which is unlike undecorated methods
+
 ```python
 @classmethod
 def do_something(cls):
@@ -91,6 +94,7 @@ def do_something(cls):
 
 - Similarly, we can use the `@staticmethod` decorator to define a method which neither operates on the class nor an instance
   - No additional arguments passed
+
 ```python
 @staticmethod
 def do_something():
@@ -140,11 +144,14 @@ def do_something():
   - These hints don't actually *do anything* at runtime
 
 Example: adding type hints to a function's arguments & return value:
+
 ```python
 def add_two(a: int, b:int) -> int:
   return a + b
 ```
+
 Example: adding type hints to an attribute:
+
 ```python
 def __init__(self):
 

@@ -4,6 +4,10 @@
 
 ### Function Arguments
 
+### Useful Builtin Functions
+
+## Data Structures
+
 ## Classes
 ### Class Basics
 ```python
@@ -81,7 +85,28 @@ print(x.f())
 - 'Protected' attributes/methods are declared `_like_this`
 - 'Public' attributes/methods are declared `like_this`
 
+## Polymorphism
+
 ## Errors
+
+
+## File I/O
+### CSV
+
+### JSON
+
+
+## Networking
+### Making Requests
+
+### FastAPI
+
+## Parallelism
+### Asyncio
+
+### Threading
+
+### Parallelism
 
 ## Testing
 ### Testing with `unittest`

@@ -1,5 +1,2 @@
-/.DS_Store
-/.vscode
-/__pycache__
-/oop_practice
-/ramp_final_prep
+*
+!*.md

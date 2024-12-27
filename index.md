@@ -28,6 +28,10 @@ title: Notes
 
 ### DateTime
 
+### Fraction/Decimal
+
+### Named Tuple
+
 ## Classes
 ### Class Basics
 
@@ -66,7 +70,6 @@ print(x.f())
   - `__getitem__(key)`, `__setitem__(key, val)`, `__delitem__(key)` - called when `obj[key]` used
   - `__contains__(item)` - True if item 'in' instance, called when `item in instance` used 
   - `__enter__`, `__exit__` - Called when enter/exit context manager, called when `with obj` used 
-
 
 ### Method Decorators
 - We can use the `@property` decorator to make getters and setters that appear like normal attributes of a class:
@@ -109,6 +112,96 @@ def do_something():
     - If called on an iterator, should return `self`
   - `__next__` returns next item in iterator
     - `StopIteration` should be raised when no more items
+- Alternative: `yield`
+  - An alternative to implementing an iterator is to use yield in a loop
+  - Python will manage the iterator for you
+
+Examples using yield:
+```python
+class IterableClass:
+  def __init__(self, data):
+    self.data = data
+
+  def __iter__(self):
+    for item in self.data:
+      yield item
+
+def do_iteration():
+  for i in range(10):
+    yield i
+```
+
+### Special Classes
+
+#### Enum
+
+- Enums work how you'd expect
+
+```python
+from enum import Enum
+
+class Weekday(Enum):
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    ...
+```
+
+- You can also let Python auto assign enum values using `auto()`
+
+```python
+from enum import Enum, auto
+
+class LightState(Enum):
+    ON = auto() # will start at 1 by default
+    OFF = auto()
+```
+
+- You can access the name/value of the enum member
+
+```python
+print(LightState.ON.name) # "on"
+print(LightState.ON.value) # 1
+```
+
+- You can make enums that also operate as integers/strings using `IntEnum` and `StrEnum`
+- You can make enums compatible with bitwise operations by using `Flag`
+  - Ex: `configure(SocketConfig.RESEND_ON_FAIL | SocketConfig.BIG_ENDIAN)`
+
+#### Dataclasses
+
+- Dataclasses are a simple way to define classes which primarily store data:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Product:
+  name: str
+  price: float
+```
+
+- Dunder methods like `__init__`, `__eq__`, etc are created automatically, to customize them you can:
+  - Write your implementation of the method like you would for any other class, overriding the default
+  - Use `field` to customize which fields (in our example: `name`, `price`) influence each dunder method
+
+Example: using `field` to make dunder methods ignore id in comparisons (like `__eq__`)
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class Person:
+  name: str
+  age: int
+  id: str = field(compare=False) 
+```
+
+Example: instantiating a dataclass
+
+```python
+person_1 = Person("Bill", 20, 1001)
+```
 
 ## Code Organization and Accessibility
 ### Namespaces
@@ -140,25 +233,40 @@ def do_something():
 ### Type System
 - Python uses **duck typing**: where an object is considered compatible with a given type if it has all the methods and attributes that the type requires
   - Example: anything can be iterated over as long as it implements 2 required methods
-- We can give arguments, return values, variables, and attributes **type hints** to improve readability and allow for some static type checking/better intellisense
+- We can give arguments, return values, and attributes (and more!) **type hints** to improve readability and allow for some static type checking/better intellisense
   - These hints don't actually *do anything* at runtime
 
-Example: adding type hints to a function's arguments & return value:
+Example: adding type hints to a function's arguments & return value
 
 ```python
 def add_two(a: int, b:int) -> int:
   return a + b
 ```
 
-Example: adding type hints to an attribute:
+Example: adding type hints to an attribute
 
 ```python
 def __init__(self):
   self.event_start: datetime | None = None
 ```
 
+Example: defining a typed dictionary and using it to instantiate a variable
+
+```python
+from typing import TypedDict
+
+class Movie(TypedDict):
+  name: str
+  year: int
+
+movie: Movie = {
+  "name": "Blade Runner",
+  "year": 1982
+}
+```
+
 ### Inheritance
-Example: deriving a class from a parent and overriding a method:
+Example: deriving a class from a parent and overriding a method
 
 ```python
 class Shape:
@@ -170,7 +278,7 @@ class Circle(Shape):
     return "Hi, i'm a circle"
 ```
 
-Example: deriving a class from multiple parents:
+Example: deriving a class from multiple parents
 
 ```python
 class Shape:
@@ -210,7 +318,7 @@ class Circle(Polygon, Opaque):
 - MRO and class initialization
   - Like other OOP languages, a subclass is expected to call a parent's constructor in it's constructor
   - Nuance: since method resolution follows a DFS ordering, a class which doesn't inherit from anything might still be required to call `super().__init__()`
-    - For an example see `Shape` in the above code snippet
+    - For an example, think about what super constructor `Shape` would need to call in the above code snippet (following the MRO)
     - This obviously can get confusing, solution is to just not do fancy things with inheritance
 
 ### Abstract Base Classes (ABCs)
@@ -218,9 +326,9 @@ class Circle(Polygon, Opaque):
   - They must subclass `ABC`
 - If a method must be overridden in a subclass, it must be decorated with `@abstractmethod`
   - If a class is instantiated with abstract methods that have not been overridden, an error is raised
-  - An ABC can define attributes that must be implemented by marking it's getter with `@abstractmethod`
+  - An ABC can define attributes that must be implemented by decorating it's getter with `@abstractmethod`
 
-Example ABC:
+Example: an ABC
 
 ```python
 from abc import ABC, abstractmethod
@@ -253,9 +361,11 @@ class Square(Shape):
   - You gain static type checking that the object passed to the argument (for example) with the type hint has the methods/attributes defined in the protocol
 - Unlike ABCs, protocols don't enforce a strict class hierarchy: as long as the object has the required methods/attributes it works
 
-Example protocol:
+Example: a protocol
 
 ```python
+from typing import Protocol, ClassVar
+
 class MyProtocol(Protocol):
   instance_attr: str         # Instance attribute
   class_attr: ClassVar[int]  # Class attribute
@@ -272,13 +382,15 @@ class ConformingClass:
   def method(self) -> None:
     print(self.instance_attr)
 
-example: MyProtocol = ConformingClass()
+my_class: MyProtocol = ConformingClass()
 ```
 
 ## Errors
 
 
 ## File I/O
+### Path
+
 ### CSV
 
 ### JSON

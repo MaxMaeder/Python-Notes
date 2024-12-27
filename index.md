@@ -1,7 +1,4 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: home
 title: Notes
 ---
@@ -20,13 +17,37 @@ is operator vs ==
 
 ### Function Arguments
 
-### Function Decorators
+```python
+def func(a, b=10, *args, c, d=5, **kwargs)
+```
+
+- There are 6 main types of arguments, and they need to be defined the below order:
+  - Positional arguments (`a`): `func(12, ...`
+    - Can also be specified by name, but must still be in order: `func(a=12, ...`
+  - Positional arguments with default values (`b`): can be omitted in call
+  - Variable-length positional arguments (`*args`): captures additional positional args in call
+  - Keyword arguments (`c`): `func(12, c=7, ...`
+    - Must be specified by name
+    - Can be passed out of order: `func(12, d=5, c=7. ...`
+    - To force callers to pass as keywords, must be defined after `*args`, or just `*` (if we're not going to do anything with the captured positional args)
+  - Keyword arguments with default values (`d`): can be omitted in call
+  - Variable-length keyword arguments (`*kwargs`): captures additional keyword args in call
+- Positional only arguments
+  - To prevent positional arguments from being specified by name, they must be defined before a `/`
+
+Example: a, b are positional arguments that cannot be specified by name, c can
+
+```python
+def func(a, b, /, c)
+```
 
 ### Useful Builtin Functions
 
 ## Data Structures
-
 ### List
+- A list backed resizable 
+
+### 
 
 ### Set
 
@@ -97,6 +118,9 @@ def name(self):
 @name.setter
 def name(self, value):
     self._name = value.upper()
+
+@name.deleter
+...
 ```
 
 - We can use the `@classmethod` decorator to define a method which operates on the class, versus an *instance of the class*
@@ -273,6 +297,7 @@ print(var2) # [1, 2, 3]
   - A shallow copy is a copy of an object that references the same nestled objects
   - A shallow copy is a copy of an object that recursively copies the nestled objects
   - An example of nestled objects are the items in a list
+- Creating copies:
 
 ```python
 import copy
@@ -281,6 +306,10 @@ var = [1, 2, 3]
 shallow_copy = copy.copy(var)
 deep_copy = copy.deepcopy(var)
 ```
+
+- To enable copying custom classes, implement:
+  - `__copy__` - return the shallow copy
+  - `__deepcopy__(memo)` - call `copy.deepcopy(obj, memo)` for each nested object, return copy
 
 ### Naming Conventions
 - Naming is mostly convention and nothing stops you from modifying a constant, for example
@@ -497,3 +526,5 @@ if __name__ == "__main__":
 ```
 
 ## Documentation
+
+## Decorators

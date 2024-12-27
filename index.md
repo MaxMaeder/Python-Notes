@@ -6,17 +6,29 @@ layout: home
 title: Notes
 ---
 
+## Control Flow, Variables
+while, else loops
+walrus operator
+swapping two variables
+ternary
+underscores in variable values
+is operator vs ==
+
 ## Functions
 - Functions can be declared within each other
 - By convention functions are declared before they are used
 
 ### Function Arguments
 
+### Function Decorators
+
 ### Useful Builtin Functions
 
 ## Data Structures
 
 ### List
+
+### Set
 
 ### Dict
 #### DefaultDict
@@ -31,6 +43,8 @@ title: Notes
 ### Fraction/Decimal
 
 ### Named Tuple
+
+## List Comprehension
 
 ## Classes
 ### Class Basics
@@ -141,10 +155,10 @@ def do_iteration():
 from enum import Enum
 
 class Weekday(Enum):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    ...
+  MONDAY = 1
+  TUESDAY = 2
+  WEDNESDAY = 3
+  ...
 ```
 
 - You can also let Python auto assign enum values using `auto()`
@@ -153,8 +167,8 @@ class Weekday(Enum):
 from enum import Enum, auto
 
 class LightState(Enum):
-    ON = auto() # will start at 1 by default
-    OFF = auto()
+  ON = auto() # will start at 1 by default
+  OFF = auto()
 ```
 
 - You can access the name/value of the enum member
@@ -164,8 +178,8 @@ print(LightState.ON.name) # "on"
 print(LightState.ON.value) # 1
 ```
 
-- You can make enums that also operate as integers/strings using `IntEnum` and `StrEnum`
-- You can make enums compatible with bitwise operations by using `Flag`
+- You can make enums that also operate as integers/strings by subclassing `IntEnum` or `StrEnum`
+- You can make enums compatible with bitwise operations by subclassing `Flag`
   - Ex: `configure(SocketConfig.RESEND_ON_FAIL | SocketConfig.BIG_ENDIAN)`
 
 #### Dataclasses
@@ -203,7 +217,7 @@ Example: instantiating a dataclass
 person_1 = Person("Bill", 20, 1001)
 ```
 
-## Code Organization and Accessibility
+## Namespaces, Scopes, and Variable Behavior
 ### Namespaces
 - A namespace as a mapping from names to objects
   - Examples: built-in names (like `abs()`), global names in a module, local names in function invocation
@@ -220,6 +234,53 @@ person_1 = Person("Bill", 20, 1001)
 - Assignments to names always go to innermost scope, except:
   - `global` - indicate variable lives in global scope
   - `nonlocal` - indicate variable lives in an enclosing scope
+
+
+### Pass by Assignment
+- Python is pass by assignment, not pass by reference or value
+  - As stated above, namespaces in Python map names to objects
+  - Everything, even integers, are objects in Python
+- When we pass a variable to a function/method, we assign a new name to that object (let's say we name it `param`)
+  - If the object is mutable, we can modify it within the function and it will be reflected outside
+  - However, if we *assign* to `param`, that name now points to a new object
+    - Since the object is now different, the change will not be reflected in the variable outside
+
+Example: pass by assignment
+```python
+def func1(param):
+  param.append(4)
+
+var1 = [1, 2, 3]
+func1(var1)
+print(var1) # [1, 2, 3, 4]
+
+def func2(param):
+  param = [2, 3, 4]
+
+var2 = [1, 2, 3]
+func2(var2)
+print(var2) # [1, 2, 3]
+```
+
+#### Keeping Track of Variable Identity
+- Get the ID of the object currently referenced by a variable: `id(var)`
+- Check if two variables reference the same object `var1 is var2`
+  - This compares IDs, unlike `var1 == var2` which invokes `__eq__`
+
+#### Duplicating objects
+- Sometimes, you need to copy an object, versus just assigning a new name to it
+- There are two ways of copying
+  - A shallow copy is a copy of an object that references the same nestled objects
+  - A shallow copy is a copy of an object that recursively copies the nestled objects
+  - An example of nestled objects are the items in a list
+
+```python
+import copy
+
+var = [1, 2, 3]
+shallow_copy = copy.copy(var)
+deep_copy = copy.deepcopy(var)
+```
 
 ### Naming Conventions
 - Naming is mostly convention and nothing stops you from modifying a constant, for example
@@ -302,6 +363,7 @@ class Circle(Polygon, Opaque):
 - When `super().say_name()` is called, Python follows the MRO to locate the next class to implement `say_name` and calls it
   - It finds the next class to implement a method by returning a *Proxy Object* that we call the method on (details left out)
 - The MRO is computed using C3 linearization, which is essentially DFS
+  - Tiebreak: go left to right in list of parent classes
 - To get the MRO, you can call `Class.mro()`
   - In our example: `Circle.mro()` returns:
 

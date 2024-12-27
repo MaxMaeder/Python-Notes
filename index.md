@@ -32,10 +32,10 @@ def func(a, b=10, *args, c, d=5, **kwargs)
     - To force callers to pass as keywords, must be defined after `*args`, or just `*` (if we're not going to do anything with the captured positional args)
   - Keyword arguments with default values (`d`): can be omitted in call
   - Variable-length keyword arguments (`*kwargs`): captures additional keyword args in call
-- Positional only arguments
+- Additional type: positional only arguments
   - To prevent positional arguments from being specified by name, they must be defined before a `/`
 
-Example: a, b are positional arguments that cannot be specified by name, c can
+Example: `a`, `b` are positional arguments that cannot be specified by name, `c` can
 
 ```python
 def func(a, b, /, c)
@@ -45,13 +45,54 @@ def func(a, b, /, c)
 
 ## Data Structures
 ### List
-- A list backed resizable 
+Python lists are mutable, ordered collections of items, backed by a resizable array
 
-### 
+Example: creating and interacting with a list
+
+```python
+my_list = [1, 2, 3]
+
+my_list.append(4)
+my_list.extend([5, 6]) # append 5, 6
+my_list.insert(0, 7) # insert 7 at index 0 (tc: o(n))
+
+my_list.remove(4) # remove first item equal to 4
+my_list.pop() # remove from end
+my_list.pop(0) # remove from index 0
+
+my_list.clear()
+my_list.index(3) # get first index of item equal to 3
+my_list.count(3) # count items equal to 3
+my_list.reverse() # reverse list
+
+3 in my_list # inefficient, o(n) check
+```
+
+#### List Comprehension
+
+#### List Slicing, Indexing
+
+#### Unpacking Lists
+
+### Tuple
+Python tuples are immutable, ordered collections of items, backed by a fixed-size array.
+
+Example: creating and interacting with a tuple
+```python
+my_tuple = (1, 2, 3)
+another_tuple = (1, ) # if tuple one item, needs trailing comma
+
+# Tuples support all methods from lists that don't involve mutation 
+```
+
+#### Named Tuple
 
 ### Set
+Python sets are mutable, unordered collections of unique items, backed by a hash table.
 
 ### Dict
+Python dictionaries are mutable, collections of key-value pairs, backed by a hash table.
+
 #### DefaultDict
 #### Counter
 
@@ -62,10 +103,6 @@ def func(a, b, /, c)
 ### DateTime
 
 ### Fraction/Decimal
-
-### Named Tuple
-
-## List Comprehension
 
 ## Classes
 ### Class Basics
@@ -388,7 +425,7 @@ class Circle(Polygon, Opaque):
     return f"Hi, i'm {super().say_name()}" # Returns: Hi, i'm Polygon
 ```
 
-#### Method resolution order: why 'polygon' was returned
+#### Method Resolution Order: why 'polygon' was returned
 - When `super().say_name()` is called, Python follows the MRO to locate the next class to implement `say_name` and calls it
   - It finds the next class to implement a method by returning a *Proxy Object* that we call the method on (details left out)
 - The MRO is computed using C3 linearization, which is essentially DFS

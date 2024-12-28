@@ -260,7 +260,47 @@ heapq.nsmallest(2, unsorted, key=lambda x: x**2)
 
 ### DateTime
 
-### Fraction/Decimal
+### Decimal
+- Decimal is a high-precision implementation of floating-point arithmetic that uses base-10
+- For comparison, Python's binary floating point `float` would produce: `1.1 + 2.2 = 3.3000000000000003`
+- To create a `Decimal` instance, pass a number or string to its constructor
+  - Decimal is immutable
+
+```python
+Decimal(10)
+Decimal('3.14')
+```
+
+- Decimal supports most arithmetic operators supported by `int`, `float`, etc.
+
+#### Arithmetic Context
+- Contexts are environments for arithmetic operations which govern precision, rules for rounding, etc.
+
+Example: set context for current thread
+
+```python
+from decimal import Decimal, getcontext
+
+getcontext().prec = 5
+
+result = Decimal('1.123456') + Decimal('2.654321')
+print(result) # = 3.7778
+```
+
+Example: set context for a block of code using a context manager
+
+```python
+from decimal import Decimal, localcontext
+
+num1 = Decimal('1.123456')
+num2 = Decimal('2.654321')
+
+with localcontext() as ctx:
+    ctx.prec = 3
+    print(num1 + num2) # = 3.78 
+```
+
+### Fraction
 
 ## Classes
 ### Class Basics
@@ -722,8 +762,11 @@ if __name__ == "__main__":
   unittest.main()
 ```
 
+### Static analysis with `mypy`
+
 ## Documentation
 
 ## Interpreter details
+[Here are really good notes](https://github.com/python/cpython/blob/main/InternalDocs/README.md)
 
 ## Decorators

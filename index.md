@@ -88,6 +88,7 @@ Python sets are mutable, unordered collections of unique items, backed by a hash
 
 ```python
 my_set = {1, 2, 3}
+empty_set = set() # empty_set = {} would make a dict
 
 my_set.add(4)
 my_set.update([5, 6]) # add 5, 6
@@ -128,8 +129,68 @@ a.isdisjoint(b) # True if a and b share no items
 ### Dict
 Python dictionaries are mutable, collections of key-value pairs, backed by a hash table.
 
-#### DefaultDict
+
+```python
+my_dict = {"a": 1, "b": 2, "c": 3}
+
+my_dict["a"]  # get value for key 'a'
+my_dict["a"] = 10  # update value for key 'a'
+
+my_dict.pop("b")  # remove key 'b' and return its value
+del my_dict["c"]  # remove key 'c'
+my_dict.clear()
+
+my_dict.keys() # get all keys
+my_dict.values() # get all values
+my_dict.items() # get all key-value pairs
+
+"a" in my_dict  # efficient, o(1) check
+my_dict.get('e', 0) # get value for key 'e', return 0 if not found
+
+my_dict |= {'e': 5} # merge another dictionary (Python 3.9+)
+```
+
+#### OrderedDict
+- Dictionaries are ordered by default: first key inserted is first in `.keys()` ordering
+- OrderedDict provides methods to reorder keys in a dict
+
+```python
+from collections import OrderedDict
+
+or_dict = OrderedDict({"a": 1, "b": 2, "c": 3})
+
+# pops (key, value) pair corresponding to last key inserted
+or_dict.popitem(last=True) 
+
+# moves key 'a' to end of dictionary (would be returned first from above)
+or_dict.move_to_end("a", last=True) 
+```
+
+#### defaultdict
+- When a key is accessed that doesn't exist, a defaultdict provides a default value by calling a default factory
+- The default factory is often a class like list, int, or set, which creates a new instance when called
+
+```python
+from collections import defaultdict
+
+my_dict = defaultdict(list)
+
+my_dict["abc"] # = []
+```
+
 #### Counter
+- A counter counts hashable objects passed to its constructor, then can be interacted with just like a dict
+
+```python
+from collections import Counter
+
+c = Counter([1, 1, 2, 3, 4])
+c # = Counter({1: 2, 2: 1, 3: 1, 4: 1})
+
+c.most_common(2) # return 2 highest counts as (item, count) pairs
+c.subtract(other_count) # subtract other_count
+c.total() # return total count
+```
 
 ### Deque (pronounced deck)
 

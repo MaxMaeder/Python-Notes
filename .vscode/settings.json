@@ -2,6 +2,7 @@
   "editor.formatOnSave": false,
   "cSpell.words": [
     "defaultdict",
+    "Deque",
     "dunder"
   ]
 }

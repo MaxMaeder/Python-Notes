@@ -192,9 +192,37 @@ c.subtract(other_count) # subtract other_count
 c.total() # return total count
 ```
 
-### Deque (pronounced deck)
+### deque (pronounced deck)
 
-### Heap
+Deques are mutable, ordered collections of items, backed by a doubly-linked list for O(1) insertion/removal from either sides
+
+```python
+from collections import deque
+
+my_deque = deque([1, 2, 3])
+
+# Insert
+my_deque.append(4)
+my_deque.appendleft(0)
+# also: extend(), extendleft()
+
+# Remove
+my_deque.pop()
+my_deque.popleft()
+
+# Rotate: move 2 steps right (insert 2 elements from right, insert on left)
+my_deque.rotate(2)
+
+# Rotate: move 2 steps left (insert 2 elements from left, insert on right)
+my_deque.rotate(-2)
+
+# Deques support all methods from Python lists, but methods related to random access or insertion/removal from the middle of the deque are O(n)
+```
+
+- A `maxlen` can be specified in the constructor: `deque([1, 2, 3], maxlen=3)`
+- When this length is reached and an element is inserted, an element is removed from the opposite end
+
+### heapq
 
 ### DateTime
 

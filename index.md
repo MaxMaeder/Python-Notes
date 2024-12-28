@@ -268,7 +268,7 @@ heapq.nsmallest(2, unsorted, key=lambda x: x**2)
 
 ```python
 Decimal(10)
-Decimal('3.14')
+Decimal("3.14")
 ```
 
 - Decimal supports most arithmetic operators supported by `int`, `float`, etc.
@@ -283,7 +283,7 @@ from decimal import Decimal, getcontext
 
 getcontext().prec = 5
 
-result = Decimal('1.123456') + Decimal('2.654321')
+result = Decimal("1.123456") + Decimal("2.654321")
 print(result) # = 3.7778
 ```
 
@@ -292,8 +292,8 @@ Example: set context for a block of code using a context manager
 ```python
 from decimal import Decimal, localcontext
 
-num1 = Decimal('1.123456')
-num2 = Decimal('2.654321')
+num1 = Decimal("1.123456")
+num2 = Decimal("2.654321")
 
 with localcontext() as ctx:
     ctx.prec = 3
@@ -301,6 +301,17 @@ with localcontext() as ctx:
 ```
 
 ### Fraction
+- Fraction enables precise rational number arithmetic
+  - Rational number: any number which can be represented as p/q where p & q are integers
+- Supports most arithmetic operators
+
+```python
+from fractions import Fraction
+
+Fraction(16, -10) # 16/-10
+Fraction(123) # 123/1
+Fraction("3/7") # 3/7
+```
 
 ## Classes
 ### Class Basics

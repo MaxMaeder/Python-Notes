@@ -81,7 +81,11 @@ another_tuple = (1, ) # if tuple one item, needs trailing comma
 # Tuples support all methods from lists that don't involve mutation 
 ```
 
+- Because tuples are immutable they can be serialized which makes them useful for keying `dict`s, etc.
+
 #### Named Tuple
+
+#### Tuple Comparisons
 
 ### Set
 Python sets are mutable, unordered collections of unique items, backed by a hash table.
@@ -125,6 +129,7 @@ a.isdisjoint(b) # True if a and b share no items
   - By default, python will use a hash function based on the object's ID
   - If `__eq__` is specified, you need to implement `__hash__` otherwise a `TypeError` is raised
     - A hash function should produce the same output if two objects are equal, so since we overrode the default `__eq__`, we can't use the default `__hash__` anymore
+- You should only be able to hash immutable objects, otherwise the invariant that the same object produces the same hash would be broken
 
 ### Dict
 Python dictionaries are mutable, collections of key-value pairs, backed by a hash table.
@@ -223,6 +228,35 @@ my_deque.rotate(-2)
 - When this length is reached and an element is inserted, an element is removed from the opposite end
 
 ### heapq
+
+A heapq is a implementation of a min-heap backed by a Python list.
+
+```python
+my_heap = []
+
+# below: O(logn) operations
+heapq.heappush(my_heap, 2) # add 2 to heap
+heapq.heappop(heap) # return smallest value in heap
+
+# Turn a list into a heap in linear time
+new_heap = [3, 1, 2]
+heapq.heapify(new_heap)
+
+# Return the largest/smallest 2 elements from an unsorted list
+unsorted = [3, 1, 2]
+heapq.nlargest(2, unsorted)
+heapq.nsmallest(2, unsorted, key=lambda x: x**2)
+```
+
+#### Changing heap ordering
+
+- A heapq will always use `a < b` to produce a min-ordering: what if we need a different ordering?
+- **Transform data before/after:** if we want a heap with the largest number on top, we can just multiply numbers by -1 before we insert & after we remove
+- **Insert as tuples:** due to how comparison of tuples work, we can use our desired ordering as the first component, then the number of insertions so far (to preserve stability), then our actual item
+  - This looks like this: `(ordering, insert_count, item)`
+  - We just look at the third component when popping from our heap
+  - We need `insert_count`, or if `ordering` was the same for two things in our heap, it would compare the `item`s to break the tie; in a stable sort it should break ties with insertion order
+- **Override `__lt__(other)`**: we can write a `__lt__` which returns True if we want this object to come before `other`
 
 ### DateTime
 

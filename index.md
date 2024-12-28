@@ -43,6 +43,8 @@ def func(a, b, /, c)
 ```
 
 ### Useful Builtin Functions
+Sort, sorted
+ord()
 
 ## Data Structures
 ### List

@@ -24,16 +24,12 @@ description: >- # this means to ignore newlines until "baseurl:"
   My notes from learning python thus far.
 baseurl: "/Python-Notes" # the subpath of your site, e.g. /blog
 url: "https://maxmaeder.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+repository: maxmaeder/Python-Notes
 
 # Build settings
-theme: minima
+theme: just-the-docs
 
-minima:
-  header_pages:
-  skin: dark
-
-header_pages:
-  - index.md
+nav_enabled: false
 
 markdown: GFM
 

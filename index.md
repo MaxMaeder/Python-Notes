@@ -8,8 +8,9 @@ while, else loops
 walrus operator
 swapping two variables
 ternary
+Structural Pattern Matching / switch statements
 underscores in variable values
-is operator vs ==
+
 
 ## Functions
 - Functions can be declared within each other
@@ -47,8 +48,6 @@ def func(a, b, /, c)
 ### List
 Python lists are mutable, ordered collections of items, backed by a resizable array
 
-Example: creating and interacting with a list
-
 ```python
 my_list = [1, 2, 3]
 
@@ -72,12 +71,9 @@ my_list.reverse() # reverse list
 
 #### List Slicing, Indexing
 
-#### Unpacking Lists
-
 ### Tuple
 Python tuples are immutable, ordered collections of items, backed by a fixed-size array.
 
-Example: creating and interacting with a tuple
 ```python
 my_tuple = (1, 2, 3)
 another_tuple = (1, ) # if tuple one item, needs trailing comma
@@ -89,6 +85,45 @@ another_tuple = (1, ) # if tuple one item, needs trailing comma
 
 ### Set
 Python sets are mutable, unordered collections of unique items, backed by a hash table.
+
+```python
+my_set = {1, 2, 3}
+
+my_set.add(4)
+my_set.update([5, 6]) # add 5, 6
+
+my_set.remove(4) # remove item equal to 4, KeyError if not found
+my_set.discard(7) # remove item equal to 4, does nothing not found
+my_set.pop() # remove a random item
+my_set.clear()
+
+3 in my_set # efficient, o(1) check
+
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+a.union(b) # return combined items 
+a | b # union shorthand
+a.intersection(b) # return common items
+a & b # intersection shorthand
+a.difference(b)  # return items in `a` not in `b`
+a - b # difference shorthand
+a.symmetric_difference(b)  # return items in `a` or `b` but not both
+a ^ b # symmetric difference shorthand
+
+a.issubset(b) # True if all items in a also in b
+a.issuperset(b) # True if all items in b also in a
+a.isdisjoint(b) # True if a and b share no items
+```
+
+#### Aside: how does python generate object hashes?
+
+- Hash tables need object hashes ([learn why](https://thepythoncorner.com/posts/2020-08-21-hash-tables-understanding-dictionaries/))
+- Python uses the `hash(obj)` function to generate the hash of `obj`
+- For custom objects, you may need to implement `__hash__`
+  - By default, python will use a hash function based on the object's ID
+  - If `__eq__` is specified, you need to implement `__hash__` otherwise a `TypeError` is raised
+    - A hash function should produce the same output if two objects are equal, so since we overrode the default `__eq__`, we can't use the default `__hash__` anymore
 
 ### Dict
 Python dictionaries are mutable, collections of key-value pairs, backed by a hash table.
@@ -205,6 +240,8 @@ def do_iteration():
   for i in range(10):
     yield i
 ```
+
+#### Unpacking Iterators
 
 ### Special Classes
 
@@ -325,7 +362,7 @@ print(var2) # [1, 2, 3]
 
 #### Keeping Track of Variable Identity
 - Get the ID of the object currently referenced by a variable: `id(var)`
-- Check if two variables reference the same object `var1 is var2`
+- Check if two variables reference the same object: `var1 is var2`
   - This compares IDs, unlike `var1 == var2` which invokes `__eq__`
 
 #### Duplicating objects
@@ -563,5 +600,7 @@ if __name__ == "__main__":
 ```
 
 ## Documentation
+
+## Interpreter details
 
 ## Decorators

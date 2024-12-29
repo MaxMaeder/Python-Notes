@@ -321,7 +321,7 @@ d = date(2024, 12, 27) # Create a date
 print(date.today()) # Get current date
 ```
 
-- Time represents a time (hour/minute):
+- Time represents a time (hour/minute/second):
 
 ```python
 from datetime import time
@@ -350,8 +350,8 @@ future = dt + timedelta(days=5) # Add 5 days
 - We can easily parse and format dates, times, and datetimes:
 
 ```python
-dt.strftime("%Y-%m-%d %H:%M:%S")  # Format to string
-new_dt = datetime.strptime("2024-12-27", "%Y-%m-%d")  # Parse from string
+dt.strftime("%Y-%m-%d %H:%M:%S") # Format to string
+new_dt = datetime.strptime("2024-12-27", "%Y-%m-%d") # Parse from string
 ```
 
 - Classes from the datetime module also support timezones:
@@ -466,6 +466,24 @@ def do_iteration():
 ```
 
 #### Unpacking Iterators
+
+Any iterable in Python can be unpacked into comma-separated variables, provided the number of variables matches the number of items in the iterable:
+
+```python
+def do_iteration(n):
+  for i in range(n):
+    yield i
+
+var1, var2, var3 = do_iteration(5) # raises ValueError
+var1, var2, var3 = do_iteration(3) # works!
+```
+
+Alternatively, you can use `*` to capture additional items into a list
+
+```python
+var1, *more = do_iteration(3) # works!
+print(var1, more) # = 1, [2, 3]
+```
 
 ### Special Classes
 

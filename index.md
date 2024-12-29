@@ -200,7 +200,6 @@ c.total() # return total count
 ```
 
 ### deque (pronounced deck)
-
 Deques are mutable, ordered collections of items, backed by a doubly-linked list for O(1) insertion/removal from either sides
 
 ```python
@@ -230,7 +229,6 @@ my_deque.rotate(-2)
 - When this length is reached and an element is inserted, an element is removed from the opposite end
 
 ### heapq
-
 A heapq is a implementation of a min-heap backed by a Python list.
 
 ```python
@@ -251,7 +249,6 @@ heapq.nsmallest(2, unsorted, key=lambda x: x**2)
 ```
 
 #### Changing heap ordering
-
 - A heapq will always use `a < b` to produce a min-ordering: what if we need a different ordering?
 - **Transform data before/after:** if we want a heap with the largest number on top, we can just multiply numbers by -1 before we insert & after we remove
 - **Insert as tuples:** due to how comparison of tuples work, we can use our desired ordering as the first component, then the number of insertions so far (to preserve stability), then our actual item
@@ -259,8 +256,6 @@ heapq.nsmallest(2, unsorted, key=lambda x: x**2)
   - We just look at the third component when popping from our heap
   - We need `insert_count`, or if `ordering` was the same for two things in our heap, it would compare the `item`s to break the tie; in a stable sort it should break ties with insertion order
 - **Override `__lt__(other)`**: we can write a `__lt__` which returns True if we want this object to come before `other`
-
-### DateTime
 
 ### Decimal
 - Decimal is a high-precision implementation of floating-point arithmetic that uses base-10
@@ -276,7 +271,7 @@ Decimal("3.14")
 - Decimal supports most arithmetic operators supported by `int`, `float`, etc.
 
 #### Arithmetic Context
-- Contexts are environments for arithmetic operations which govern precision, rules for rounding, etc.
+Contexts are environments for arithmetic operations which govern precision, rules for rounding, etc.
 
 Example: set context for current thread
 
@@ -313,6 +308,59 @@ from fractions import Fraction
 Fraction(16, -10) # 16/-10
 Fraction(123) # 123/1
 Fraction("3/7") # 3/7
+```
+
+### DateTime, ZoneInfo
+
+- Date represents a calendar date (year, month, day):
+
+```python
+from datetime import date
+
+d = date(2024, 12, 27) # Create a date
+print(date.today()) # Get current date
+```
+
+- Time represents a time (hour/minute):
+
+```python
+from datetime import time
+
+t = time(14, 30, 45) # Create a time
+print(t.hour, t.minute) # Access attributes
+```
+
+- Datetime combines the two:
+
+```python
+from datetime import datetime
+
+dt = datetime(2024, 12, 27, 14, 30, 45) # Create a datetime
+print(datetime.now()) # Get current date and time
+```
+
+- Timedelta represents a duration/difference between dates/times:
+
+```python
+from datetime import timedelta
+
+future = dt + timedelta(days=5) # Add 5 days
+```
+
+- We can easily parse and format dates, times, and datetimes:
+
+```python
+dt.strftime("%Y-%m-%d %H:%M:%S")  # Format to string
+new_dt = datetime.strptime("2024-12-27", "%Y-%m-%d")  # Parse from string
+```
+
+- Classes from the datetime module also support timezones:
+
+```python
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+dt = datetime.now(tz=ZoneInfo("UTC")) # Current UTC time
 ```
 
 ## Classes

@@ -40,6 +40,7 @@ while cond():
 - `break`: leave loop early
 - `continue`: go to start of next loop iteration
 - Loop `else` clause: executed if loop runs to completion (no `break` statement)
+
 ```python
 for i in range(5):
   print(i)

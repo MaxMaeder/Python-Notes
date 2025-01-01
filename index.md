@@ -10,6 +10,7 @@ swapping two variables
 ternary
 Structural Pattern Matching / switch statements
 underscores in variable values
+Comparison with multiple things py x < y < z
 
 
 ## Functions
@@ -42,7 +43,9 @@ Example: `a`, `b` are positional arguments that cannot be specified by name, `c`
 def func(a, b, /, c)
 ```
 
-### Useful Builtin Functions
+### Lambda Functions
+
+## Useful Builtin Functions
 Sort, sorted
 ord()
 
@@ -387,6 +390,7 @@ print(x.f())
 ### Calling Methods
 - Assume `x = SomeClass()` , if you do `x.foo()`, the instance object will be passed as the the first argument to the function
   - Conversely, if you did `SomeClass.foo()`, no instance is passed
+  - So `SomeClass.foo(x)` is the same as `x.foo()`
 - So, methods are not `static` or `instance` like in other languages, nothing stops a user from calling them in one context or another (see method decorators for exceptions)
   - Additionally, naming the first attribute `self` is nothing but convention
 
@@ -465,6 +469,8 @@ def do_iteration():
     yield i
 ```
 
+yield from
+
 #### Unpacking Iterators
 
 Any iterable in Python can be unpacked into comma-separated variables, provided the number of variables matches the number of items in the iterable:
@@ -484,6 +490,11 @@ Alternatively, you can use `*` to capture additional items into a list
 var1, *more = do_iteration(3) # works!
 print(var1, more) # = 1, [2, 3]
 ```
+
+#### Itertools
+Zip
+ZipLongest
+Etc
 
 ### Special Classes
 
@@ -792,8 +803,20 @@ class ConformingClass:
 my_class: MyProtocol = ConformingClass()
 ```
 
+isinstance, type
+
 ## Errors
 
+
+## Data Structure Libraries
+
+### SortedList
+
+## Data Science Libraries
+
+### BeautifulSoup
+
+### MatPlotLib
 
 ## File I/O
 ### Path

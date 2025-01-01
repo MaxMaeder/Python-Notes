@@ -21,11 +21,20 @@ for item in arr:
 We can use range to produce an iterator over range of numbers:
 
 ```python
+# start inclusive, end exclusive, last argument step size
 range(3) # iterates from 0...2
 range(1, 3) # iterates from 1...2
 range(2, 0, -1) # iterates from 2...1
+```
 
-# start inclusive, end exclusive, last argument step size
+#### Enumerate Function
+Turns an iterator into another iterator of tuples of (index, value of original iterator):
+
+```python
+arr = ["bill", "jeff"]
+
+enumerate(arr) # (0, bill), (1, jeff)
+enumerate(arr, start=1) # (1, bill), (2, jeff)
 ```
 
 #### While Loops
@@ -179,8 +188,29 @@ def func(a, b, /, c)
 ```
 
 ### Lambda Functions
+Lambda functions are small anonymous functions (limited to one expression):
+
+```python
+# Example uses of a lambda
+do_something(lambda a, b: a+b)
+pairs.sort(key=lambda pair: pair[1])
+```
 
 ## Useful Builtin Functions
+- `ord(x)`: gets unicode character code for x
+- `quotient, remainder = divmod(a, b)`: does a / b, returning quotient and remainder
+- `sorted(x)`: sorts an iterator
+- `all(x)`, `any(x)`: returns true if all elements in iterator True, or any are (respectively)
+- `filter(func, x)`: constructs an iterator from elements of iterable `x` for which `func` returned true
+  - Ex: `filter(lambda x: x % 2 == 0, arr)`
+- `map(func, x)`: constructs an iterator by applying `func` to each element of the iterable `x`
+  - Ex: `map(lambda x: x ** 2, arr)`
+- `len(x)`: returns length of iterator
+- `sum(x)`: sums items in iterator
+- `min(x)`, `max(x)`: returns min/max value in iterator
+- `zip(*iterators, strict=False)`: returns an iterator of tuples, where the i-th tuple contains the i-th element from each of the argument iterables
+  - Will stop after shortest of iterators exhausted, if `strict=True` will instead raise `ValueError`
+
 Sort, sorted
 ord()
 

@@ -211,9 +211,6 @@ pairs.sort(key=lambda pair: pair[1])
 - `zip(*iterators, strict=False)`: returns an iterator of tuples, where the i-th tuple contains the i-th element from each of the argument iterables
   - Will stop after shortest of iterators exhausted, if `strict=True` will instead raise `ValueError`
 
-Sort, sorted
-ord()
-
 ## Data Structures
 ### List
 Python lists are mutable, ordered collections of items, backed by a resizable array
@@ -240,6 +237,26 @@ my_list.reverse() # reverse list
 #### List Comprehension
 
 #### List Slicing, Indexing
+- Can index from the start or back (zero-indexed):
+
+```python
+arr = [1, 2, 3]
+print(arr[0]) # 1
+print(arr[-1]) # 3
+```
+
+- Can 'slice' a portion of an array
+  - First number: start index (inclusive)
+  - Second number: end index (exclusive)
+  - Third number: step size 
+
+```python
+arr = [1, 2, 3, 4, 5]
+print(arr[0:2]) # [1, 2]
+print(arr[0:4:2]) # [1, 3]
+```
+
+- To do indexing on custom classes, need to implement several dundermethods
 
 ### Tuple
 Python tuples are immutable, ordered collections of items, backed by a fixed-size array.
@@ -303,7 +320,6 @@ a.isdisjoint(b) # True if a and b share no items
 
 ### Dict
 Python dictionaries are mutable, collections of key-value pairs, backed by a hash table.
-
 
 ```python
 my_dict = {"a": 1, "b": 2, "c": 3}
@@ -976,7 +992,9 @@ my_class: MyProtocol = ConformingClass()
 
 isinstance, type
 
-## Errors
+## Erros/Exceptions
+- There are two types of error: syntax errors and exceptions
+
 
 
 ## Data Structure Libraries
@@ -986,6 +1004,61 @@ isinstance, type
 ## Data Science Libraries
 
 ### BeautifulSoup
+A library for pulling data out of HTML (and XML documents).
+
+Parsing a document:
+
+```python
+from bs4 import BeautifulSoup
+
+# Can parse from a file pointer or a string
+soup = BeautifulSoup(fp)
+soup = BeautifulSoup("<html>data</html>")
+```
+
+Searching a document tree:
+
+```python
+# Find all <title> tags 
+soup.find_all("title") # find_all: returns all matches as list
+
+# Like selector querying in JS, can call on a tag to return matching descendants
+body = soup.find("body") # find: returns first match vs all
+body.find_all("p")
+
+# Finds descendants where HTML attributes match the specified keyword arguments
+body.find_all("div", class_="example") # need underscore b/c class reserved keyword in python
+body.find_all(id="example") # don't need to specify tag name
+body.find_all("div", {"data-id": "123"})
+
+# Can pass a regex to argument that takes a string
+pattern = re.compile(r'^example-\d+')
+matched_divs = soup.find_all("div", class_=pattern)
+
+# Find only direct descendants (equivalent to body > p)
+body.find_all("p", recursive=False)
+
+# Get a tag's children
+body.contents # list of children
+body.children # iterator over children
+
+# Other ways to navigate from an tag
+body.parent # direct parent
+body.parents # iterator of parents up the tree
+body.next_sibling # next sibling (also: .previous_sibling)
+body.next_siblings # iterator of next siblings
+```
+
+Querying tags:
+
+```python
+div = soup.find("div")
+
+div.name # = "div"
+div.gettext() # Returns text content under tag
+"id" in div # True if attribute exists on tag
+div["id"] # Get attribute
+```
 
 ### MatPlotLib
 

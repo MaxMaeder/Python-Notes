@@ -4,14 +4,148 @@ title: Notes
 ---
 
 ## Control Flow, Variables
-while, else loops
-walrus operator
-swapping two variables
-ternary
-Structural Pattern Matching / switch statements
-underscores in variable values
-Comparison with multiple things py x < y < z
 
+### Loops
+
+#### For Loops
+
+For loops loop over any iterator:
+
+```python
+arr = [1, 2, 3]
+for item in arr:
+  print(arr)
+```
+
+##### Range Function
+We can use range to produce an iterator over range of numbers:
+
+```python
+range(3) # iterates from 0...2
+range(1, 3) # iterates from 1...2
+range(2, 0, -1) # iterates from 2...1
+
+# start inclusive, end exclusive, last argument step size
+```
+
+#### While Loops
+While loops work like any other language
+
+```python
+while cond():
+  print("loop")
+```
+
+#### Loop Control
+- `break`: leave loop early
+- `continue`: go to start of next loop iteration
+- Loop `else` clause: executed if loop runs to completion (no `break` statement)
+```python
+for i in range(5):
+  print(i)
+else:
+  print("Ran to completion") # will print
+
+for i in range(5):
+  break
+else:
+  print("Ran to completion") # won't print
+```
+
+### Assignment
+
+#### Walrus Operator
+`:=` allows us to assign a value to a variable as part of an expression:
+
+```python
+with open("file.txt") as f:
+  while (line := f.readline()):
+    print(line.strip())
+```
+
+#### Multiple Variable Assignment
+Can assign variables like this:
+
+```python
+a, b = 1, 3
+a, b = b, a # swap values
+```
+
+#### Numerical Variable Assignment
+Can use an underscore as a separator in large numbers: `population = 1_000_000`
+
+### Ternary Operators
+In python, they work like this:
+
+```python
+n = 5
+print("Even" if n % 2 == 0 else "Odd")
+```
+
+### Expressions
+- Math operators: all normal, exponentiation: `a ** b` (equals a^b)
+- Logical: `and`, `or`, `not`
+- Equality: `==`, `!=`
+- Comparison: `>=`, `<=`, `>`, `<`, can be combined: `1 < x < 5`
+
+### Structural Pattern Matching
+
+Their most basic form work like switch statements:
+
+```python
+match status:
+  case 400:
+    return "Bad request"
+  case 404:
+    return "Not found"
+  case _:
+    return "Something's wrong with the internet"
+```
+
+Can combine several options into one 'pattern' with `|`:
+
+```python
+case 401 | 403 | 404:
+  return "Not allowed"
+```
+
+Can unpack/assign to variables in a pattern:
+
+```python
+match point:
+  case (0, 0):
+    print("Origin")
+  case (0, y):
+    print(f"Y={y}")
+  case (x, 0):
+    print(f"X={x}")
+  case (x, y):
+    print(f"X={x}, Y={y}")
+# we can now see that the 'default' case is just unpacking whatever value we have
+#   into a variable, which would always match
+  case _: 
+    raise ValueError("Not a point")
+```
+
+We can also add an if statement to a pattern (a *guard*), which only lets the pattern match if the statement is true:
+
+```python
+match point:
+    case Point(x, y) if x == y:
+        print(f"Y=X at {x}")
+    case Point(x, y):
+        print(f"Not on the diagonal")
+```
+
+To do unpacking with a custom class like `Point` above, we need to tell Python what attributes to unpack into the variables:
+
+```python 
+class Point:
+  __match_args__ = ("x", "y")
+  def __init__(self, x, y):
+    self.x = x
+    self.y = y
+```
 
 ## Functions
 - Functions can be declared within each other
@@ -642,9 +776,15 @@ deep_copy = copy.deepcopy(var)
 - Naming is mostly convention and nothing stops you from modifying a constant, for example
 - Constants are declared `LIKE_THIS`
 - 'Private' attributes/methods are declared `__like_this`
-  - Private attributes are prefixed by the class name at runtime so if a subclass re-uses the name, they do not conflict
+  - Private attributes are prefixed by the class name at runtime so if a subclass re-uses the name, they do not conflict (called name mangling)
 - 'Protected' attributes/methods are declared `_like_this`
 - 'Public' attributes/methods are declared `like_this`
+- Names we don't care about are declared `_`, ex:
+
+```python
+for _ in range(5):
+  print("Hello")
+```
 
 ## Typing and Polymorphism
 ### Type System

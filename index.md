@@ -216,9 +216,42 @@ pairs.sort(key=lambda pair: pair[1])
 Python strings are immutable sequences of characters
 
 ```python
-s = "Hello, World!"
+s = "Hello, World! Hello."
 
+'Hello' in s # True if substring in string
+s.count("Hello") # Count occurrences of substring
+
+s.find("Hello") # Returns starting index of first occurrence of substring, -1 if not found
+s.rfind("Hello") # Returns starting index of last occurrence
+
+s.startswith("Hello") # True if string starts with substring (also: endswith)
+s.removeprefix("Hello") # Remove that substring (also: removesuffix)
+
+", ".join([1, 2, 3]) # Join iterable using string
+
+s.replace("Hello", "Bye") # Replace a sustring with another
+s.split(",") # Split the string by the substring
+s.splitlines() # Split the string by line breaks
+
+s.strip() # Remove leading & trailing whitespace (also: lstrip, rstrip)
+s.upper() # Make string uppercase (also: lower)
 ```
+
+#### Regex
+The `re` module provides Regex support.
+
+- **Modifying the string - common**
+  - `re.split(pattern, string)`: return `string` split by matches of `pattern`
+  - `re.sub(pattern, repl, string)`: return `string` with all matches of `pattern` replaced with `repl`
+- Finding a single match
+  - `re.search(pattern, string)`: return first `Match` of `pattern` anywhere in `string`, or None
+  - `re.match(pattern, string)`: return `Match` of `pattern` beginning at start of `string`, or None
+  - `re.fullmatch(pattern, string)`: return `Match` if whole `string` matches `pattern`, or None
+- Using a `Match`
+  - `match.groups()` Return contents of all capturing groups in match
+- Finding all matches
+  - `re.findall(pattern, string)`: return all matches as a list of strings or tuples
+    - If capturing groups in pattern will be tuple of their contents, else a string of the whole match
 
 ### List
 Python lists are mutable, ordered collections of items, backed by a resizable array
@@ -1037,8 +1070,6 @@ my_class: MyProtocol = ConformingClass()
 ## Erros/Exceptions
 - There are two types of error: syntax errors and exceptions
 
-## Regex
-
 ## External Data Structure Libraries
 
 ### SortedList
@@ -1322,7 +1353,7 @@ async def main():
 data = {"key": "value"} # Request body
 params = {"key1": "value1"} # URL params, etc: /get?key1=value1
 
-async with session.get('http://httpbin.org/get', json=data params=params) as resp:
+async with session.get('http://httpbin.org/get', json=data, params=params) as resp:
   print(resp.status) # HTTP status code
   print(await resp.text()) # Response body as text
   print(await resp.json()) # Response body parsed as JSON
@@ -1330,7 +1361,7 @@ async with session.get('http://httpbin.org/get', json=data params=params) as res
 
 ### FastAPI and WSGI/ASGI
 
-Probably won't be in interviews
+Probably won't be in interviews.
 
 ## Modules, Packages, and Package Management
 

@@ -212,6 +212,14 @@ pairs.sort(key=lambda pair: pair[1])
   - Will stop after shortest of iterators exhausted, if `strict=True` will instead raise `ValueError`
 
 ## Data Structures
+### String
+Python strings are immutable sequences of characters
+
+```python
+s = "Hello, World!"
+
+```
+
 ### List
 Python lists are mutable, ordered collections of items, backed by a resizable array
 
@@ -268,11 +276,25 @@ another_tuple = (1, ) # if tuple one item, needs trailing comma
 # Tuples support all methods from lists that don't involve mutation 
 ```
 
-- Because tuples are immutable they can be serialized which makes them useful for keying `dict`s, etc.
+Because tuples are immutable they can be serialized which makes them useful for keying `dict`s, etc.
 
 #### Named Tuple
+`namedtuple()` creates tuple objects with named fields so fields can be accessed by index or name
+
+```python
+Point = namedtuple("Point", ["x", "y"])
+
+# Can assign values using positional or keyword args
+p = Point(11, y=22)
+
+# Equivalent
+print(p[0] + p[1])
+print(p.x + p.y)
+```
 
 #### Tuple Comparisons
+- Tuples are compared by comparing their contents left to right, stopping once unequal elements found
+- This makes them great for using with sorts and heapqs
 
 ### Set
 Python sets are mutable, unordered collections of unique items, backed by a hash table.
@@ -494,8 +516,19 @@ Fraction(123) # 123/1
 Fraction("3/7") # 3/7
 ```
 
-### DateTime, ZoneInfo
+### Time
+The `Time` module works in raw, very precise times measured as time since UNIX epoch.
 
+```python
+time.time() # Current time in seconds
+time.time_ns() # Nanoseconds
+
+time.sleep(s) # Sleep thread for s seconds
+```
+
+### DateTime
+- All DateTime classes other than delta can be naive or aware: aware objects pay attention to timezone and are more complicated to use, so use naive unless you need to stuff with multiple timezones
+  - Below examples are for naive
 - Date represents a calendar date (year, month, day):
 
 ```python
@@ -520,6 +553,8 @@ print(t.hour, t.minute) # Access attributes
 from datetime import datetime
 
 dt = datetime(2024, 12, 27, 14, 30, 45) # Create a datetime
+dt2 = datetime.fromtimestamp(111100) # Create a datetime from UNIX time
+
 print(datetime.now()) # Get current date and time
 ```
 
@@ -529,6 +564,9 @@ print(datetime.now()) # Get current date and time
 from datetime import timedelta
 
 future = dt + timedelta(days=5) # Add 5 days
+
+td = timedelta(days=1, minutes=1)
+print(td.total_seconds()) # Get duration in seconds
 ```
 
 - We can easily parse and format dates, times, and datetimes:
@@ -536,9 +574,12 @@ future = dt + timedelta(days=5) # Add 5 days
 ```python
 dt.strftime("%Y-%m-%d %H:%M:%S") # Format to string
 new_dt = datetime.strptime("2024-12-27", "%Y-%m-%d") # Parse from string
+
+dt.toisoformat() # Format to ISO format
+dt.fromisoformat("2024-12-27") # Parse from ANY ISO format
 ```
 
-- Classes from the datetime module also support timezones:
+- Classes from the DateTime module also support timezones with ZoneInfo, making them *aware*:
 
 ```python
 from datetime import datetime
@@ -996,7 +1037,7 @@ my_class: MyProtocol = ConformingClass()
 ## Erros/Exceptions
 - There are two types of error: syntax errors and exceptions
 
-
+## Regex
 
 ## External Data Structure Libraries
 
@@ -1075,8 +1116,6 @@ with open("test.txt", "w") as file:
 | a    | Append or create then write  |
 | b    | Binary mode, used like: `wb` |
 | +    | Read + write                 |
-
-### Path
 
 ### CSV
 
@@ -1206,13 +1245,6 @@ div.gettext() # Returns text content under tag
 div["id"] # Get attribute
 ```
 
-## Networking
-### Making Requests
-
-### FastAPI
-
-### WSGI/ASGI
-
 ## Parallelism
 ### Asyncio
 https://stackoverflow.com/questions/42231161/asyncio-gather-vs-asyncio-wait-vs-asyncio-taskgroup
@@ -1220,6 +1252,85 @@ https://stackoverflow.com/questions/42231161/asyncio-gather-vs-asyncio-wait-vs-a
 ### Threading
 
 ### Parallelism
+
+## Networking
+### Making Requests
+#### Synchronous API - requests
+Requests is a simple synchronous library for making HTTP requests.
+
+- Making a request:
+
+```python
+import requests
+
+# replace 'get' with the HTTP verb (post, patch, etc)
+r = requests.get("https://api.github.com/events")
+```
+
+- Adding data to a request:
+
+```python
+headers = {"user-agent": "my-app/0.0.1"} # HTTP Headers
+data = {"key": "value"} # Request body
+params = {"key1": "value1"} # URL params, etc: /get?key1=value1
+
+r = requests.post("https://myapi.com/endpoint", headers=headers, data=data, params=params)
+```
+
+- Using the response:
+
+```python
+r.status_code # HTTP status code
+r.status_code == requests.codes.ok # Evaluates to True if request OK
+
+r.raise_for_status() # Will raise relevant error if response != OK
+
+r.headers # Response headers
+
+r.content # Response body as raw binary
+r.text # Response body as text
+r.json() # Response body, parsed as JSON
+```
+
+#### Asynchronous API - AIOHTTP
+
+- Create a client session (per application, usually):
+
+```python
+import aiohttp
+import asyncio
+
+async def main():
+  async with aiohttp.ClientSession() as session:
+    # requests here
+
+asyncio.run(main())
+```
+
+- Or, can make session without a context manager:
+
+```python
+async def main():
+  session = aiohttp.ClientSession()
+  # requests here
+  await session.close()
+```
+
+- Then make a request:
+
+```python
+data = {"key": "value"} # Request body
+params = {"key1": "value1"} # URL params, etc: /get?key1=value1
+
+async with session.get('http://httpbin.org/get', json=data params=params) as resp:
+  print(resp.status) # HTTP status code
+  print(await resp.text()) # Response body as text
+  print(await resp.json()) # Response body parsed as JSON
+```
+
+### FastAPI and WSGI/ASGI
+
+Probably won't be in interviews
 
 ## Modules, Packages, and Package Management
 

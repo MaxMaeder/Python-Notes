@@ -1059,12 +1059,14 @@ with open("test.txt", "w") as file:
 ```
 
 ### File access modes
-| r | Read only, file must exist  |
-|---|-----------------------------|
-| w | Write or create then write  |
-| a | Append or create then write |
-| b | Binary mode, used like "wb" |
-| + | Read + write                |
+
+| Mode | Description                 |
+|------|-----------------------------|
+| r    | Read only, file must exist  |
+| w    | Write or create then write  |
+| a    | Append or create then write |
+| b    | Binary mode, used like "wb" |
+| +    | Read + write                |
 
 ### Path
 

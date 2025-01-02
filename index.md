@@ -1005,14 +1005,14 @@ isinstance, type
 
 ### Matplotlib
 
-1. Create plot objects using `subplots()`:
+- Create plot objects using `subplots()`:
 
 ```python
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
 ```
 
-2. Create plot & add data:
+- Create plot & add data:
 
 ```python
 # Scatter
@@ -1031,7 +1031,7 @@ bins = 5
 ax.hist(data, bins=bins)
 ```
 
-3. Customize, save as file, close object:
+- Customize, save as file, close object:
 
 ```python
 ax.set_title("Chart Title")
@@ -1043,6 +1043,29 @@ plt.close(fig)
 ```
 
 ## File I/O
+- Use `open(filename, mode)` to open files
+- Can access files, then manually close:
+
+```python
+file = open("test.txt", "r")
+print(file.read())
+file.close()
+```
+
+- Or, can auto-close using a context manager:
+```python
+with open("test.txt", "w") as file:
+    file.write("hello world")
+```
+
+### File access modes
+| r | Read only, file must exist  |
+|---|-----------------------------|
+| w | Write or create then write  |
+| a | Append or create then write |
+| b | Binary mode, used like "wb" |
+| + | Read + write                |
+
 ### Path
 
 ### CSV

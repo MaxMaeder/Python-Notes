@@ -1105,7 +1105,7 @@ with open("test.csv", "w", newline="") as file:
 
   # Write rows one at a time
   for line in write_test:
-      writer.writerow(line) # line can be any iterable
+    writer.writerow(line) # line can be any iterable
 
   # Write rows all at once
   writer.writerows(write_test)
@@ -1130,6 +1130,24 @@ with open("test_dict.csv") as file:
 ```
 
 ### JSON
+
+- Load JSON:
+
+```python
+import json
+
+obj_1 = json.load(filepointer) # from a file
+obj_2 = json.loads(string) # from a string
+```
+
+- 'Dump' JSON:
+
+```python
+json.dump(obj_1, filepointer) # to a file
+print(json.dumps(obj_1)) # to a string
+```
+
+- Interact with JSON objects as you would Python dicts/lists
 
 ### HTML/BeautifulSoup
 A library for pulling data out of HTML (and XML documents).
@@ -1187,7 +1205,6 @@ div.gettext() # Returns text content under tag
 "id" in div # True if attribute exists on tag
 div["id"] # Get attribute
 ```
-
 
 ## Networking
 ### Making Requests

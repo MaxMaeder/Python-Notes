@@ -1053,6 +1053,7 @@ file.close()
 ```
 
 - Or, can auto-close using a context manager:
+
 ```python
 with open("test.txt", "w") as file:
     file.write("hello world")

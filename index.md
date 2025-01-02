@@ -997,13 +997,59 @@ isinstance, type
 
 
 
-## Data Structure Libraries
+## External Data Structure Libraries
 
 ### SortedList
 
-## Data Science Libraries
+## Data Display
 
-### BeautifulSoup
+### Matplotlib
+
+1. Create plot objects using `subplots()`:
+
+```python
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+```
+
+2. Create plot & add data:
+
+```python
+# Scatter
+x = [1, 2, 3, 4, 5]
+y = [2, 3, 4, 5, 6]
+ax.scatter(x, y)
+
+# Bar
+categories = ["A", "B", "C", "D"]
+values = [10, 20, 15, 30]
+ax.bar(categories, values)
+
+# Histogram
+data = [1, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7]
+bins = 5
+ax.hist(data, bins=bins)
+```
+
+3. Customize, save as file, close object:
+
+```python
+ax.set_title("Chart Title")
+ax.set_xlabel("X Label")
+ax.set_ylabel("Y Label")
+
+fig.savefig("chart.png")
+plt.close(fig)
+```
+
+## File I/O
+### Path
+
+### CSV
+
+### JSON
+
+### HTML/BeautifulSoup
 A library for pulling data out of HTML (and XML documents).
 
 Parsing a document:
@@ -1059,15 +1105,6 @@ div.gettext() # Returns text content under tag
 "id" in div # True if attribute exists on tag
 div["id"] # Get attribute
 ```
-
-### MatPlotLib
-
-## File I/O
-### Path
-
-### CSV
-
-### JSON
 
 
 ## Networking

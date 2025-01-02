@@ -673,9 +673,8 @@ print(var1, more) # = 1, [2, 3]
 ```
 
 #### Itertools
-Zip
-ZipLongest
-Etc
+
+ToDo Potentially
 
 ### Special Classes
 
@@ -990,7 +989,9 @@ class ConformingClass:
 my_class: MyProtocol = ConformingClass()
 ```
 
-isinstance, type
+### Runtime Type Checks
+- `type(obj) == Class`: evaluates to True if `obj` is an instance of `Class`
+- `isinstance(obj, Class)`: returns True if `obj` is a instance of `Class` **or a subclass**
 
 ## Erros/Exceptions
 - There are two types of error: syntax errors and exceptions
@@ -1048,7 +1049,13 @@ plt.close(fig)
 
 ```python
 file = open("test.txt", "r")
-print(file.read())
+
+file.read(3) # read 3 bytes
+file.readline() # read one line
+
+file.seek(0) # "rewind" file to start
+file.read() # read till end
+
 file.close()
 ```
 
@@ -1056,22 +1063,71 @@ file.close()
 
 ```python
 with open("test.txt", "w") as file:
-    file.write("hello world")
+  file.write("hello world")
 ```
 
 ### File access modes
 
-| Mode | Description                 |
-|------|-----------------------------|
-| r    | Read only, file must exist  |
-| w    | Write or create then write  |
-| a    | Append or create then write |
-| b    | Binary mode, used like "wb" |
-| +    | Read + write                |
+| Mode | Description                  |
+|------|------------------------------|
+| r    | Read only, file must exist   |
+| w    | Write or create then write   |
+| a    | Append or create then write  |
+| b    | Binary mode, used like: `wb` |
+| +    | Read + write                 |
 
 ### Path
 
 ### CSV
+
+- Read from a CSV:
+
+```python
+import csv
+
+with open("test.csv") as file:
+  reader = csv.reader(file)
+  for line in reader:
+    print(", ".join(line))
+```
+
+- Write to a CSV:
+
+```python
+write_test = [
+  ["Name", "Age"],
+  ["Max", 20],
+  ["Bill", 21]
+]
+
+with open("test.csv", "w", newline="") as file:
+  writer = csv.writer(file)
+
+  # Write rows one at a time
+  for line in write_test:
+      writer.writerow(line) # line can be any iterable
+
+  # Write rows all at once
+  writer.writerows(write_test)
+```
+
+- Read/Write to a CSV from a dict:
+
+```python
+test_dict = [{"Name": "Max", "Age": 20}, {"Name": "Bill", "Age": 21}]
+
+# Do write
+with open("test_dict.csv", "w", newline="") as file:
+  writer = csv.DictWriter(file, fieldnames=test_dict[0].keys())
+  writer.writeheader()
+  writer.writerows(test_dict)
+
+# Do read
+with open("test_dict.csv") as file:
+  reader = csv.DictReader(file)
+  for line in reader:
+    print(line) # = {"Name": "Max", "Age": 20}
+```
 
 ### JSON
 

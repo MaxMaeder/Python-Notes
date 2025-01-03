@@ -1571,20 +1571,39 @@ Probably won't be in interviews.
 
 ## Testing
 ### Testing with `unittest`
-- Always put expected value before actual
+- Test cases are written as methods in a class than subclasses `unittest.TestCase`
+- Assertions: available as instance methods
+  - Always put expected value before actual
+  - `self.assertEqual(a, b)`
+  - `self.assertTrue(a)`
+  - `self.assertRaises(exception, func, *args, **kwargs)`
+  - `with self.assertRaises(exception)`: put code which should error in context manager block
+  - `self.assertIn(a, b)`: assert `a in b`
+- Setup & teardown
+  - `setUp()`: code that runs before every test method
+  - `tearDown()`: code that runs after every test method
+
+Example: some unittest test cases
 
 ```python
 import unittest
 
-class TestStatisticalFunctions(unittest.TestCase):
+class TestMathOperations(unittest.TestCase):
+  def setUp(self):
+    print("Setting up resources")
 
-  def test_average(self):
-    self.assertEqual(40.0, average([20, 30, 70]))
-    self.assertEqual(4.3, round(average([1, 5, 7]), 1))
+  def tearDown(self):
+    print("Cleaning up resources")
+
+  def test_addition(self):
+    self.assertEqual(1 + 1, 2)
+
+  def test_subtraction(self):
+    self.assertEqual(5 - 3, 2)
+
+  def test_divide_by_zero(self):
     with self.assertRaises(ZeroDivisionError):
-      average([])
-    with self.assertRaises(TypeError):
-      average(20, 30, 70)
+      1 / 0
 
 if __name__ == "__main__":
   unittest.main()

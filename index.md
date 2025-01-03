@@ -1130,12 +1130,24 @@ my_class: MyProtocol = ConformingClass()
 - `type(obj) == Class`: evaluates to True if `obj` is an instance of `Class`
 - `isinstance(obj, Class)`: returns True if `obj` is a instance of `Class` **or a subclass**
 
-## Erros/Exceptions
+## Errors/Exceptions
 - There are two types of error: syntax errors and exceptions
 
 ## External Data Structure Libraries
+### SortedContainers
+- SortedContainers contains SortedList, SortedSet, and SortedDict classes.
+  - Each supports all methods of its non-sorted counterpart
+  - Each are sorted by comparing the item (or for SortedDict, by key)
 
-### SortedList
+#### Additional SortedSet methods
+- `SortedSet.index(item)`: index of item in set, or -1
+
+#### Additional SortedDict methods
+- `SortedDict.index(item)`: index of item in dict, or -1
+- `SortedDict.peekitem(index)`: return item at index
+- `SortedDict.popitem(index)`: **remove** & return item at index
+
+[Additional Sorted Container Documentation](https://grantjenks.com/docs/sortedcontainers/)
 
 ## Data Display
 ### Matplotlib
@@ -1176,6 +1188,8 @@ ax.set_ylabel("Y Label")
 fig.savefig("chart.png")
 plt.close(fig)
 ```
+
+[Additional Matplotlib Documentation](https://matplotlib.org/stable/users/index)
 
 ## File I/O
 - Use `open(filename, mode)` to open files

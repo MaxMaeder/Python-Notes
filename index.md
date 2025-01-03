@@ -1610,7 +1610,8 @@ if __name__ == "__main__":
 ```
 
 ### Static analysis with `mypy`
-Probably won’t be in interviews.
+- Runs static type checking using type hints
+- Invoke: `mypy file.py` 
 
 ## Documentation
 

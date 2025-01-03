@@ -241,17 +241,23 @@ s.upper() # Make string uppercase (also: lower)
 The `re` module provides Regex support.
 
 - **Modifying the string - common**
-  - `re.split(pattern, string)`: return `string` split by matches of `pattern`
-  - `re.sub(pattern, repl, string)`: return `string` with all matches of `pattern` replaced with `repl`
+  - `re.split(r"pattern", string)`: return `string` split by matches of `pattern`
+  - `re.sub(r"pattern", repl, string)`: return `string` with all matches of `pattern` replaced with `repl`
 - Finding a single match
-  - `re.search(pattern, string)`: return first `Match` of `pattern` anywhere in `string`, or None
-  - `re.match(pattern, string)`: return `Match` of `pattern` beginning at start of `string`, or None
-  - `re.fullmatch(pattern, string)`: return `Match` if whole `string` matches `pattern`, or None
+  - `re.search(r"pattern", string)`: return first `Match` of `pattern` anywhere in `string`, or None
+  - `re.match(r"pattern", string)`: return `Match` of `pattern` beginning at start of `string`, or None
+  - `re.fullmatch(r"pattern", string)`: return `Match` if whole `string` matches `pattern`, or None
+    - Essentially: `re.fullmatch(r"pattern")` == `re.search(r"^pattern$")`
 - Using a `Match`
-  - `match.groups()` Return contents of all capturing groups in match
+  - `match.group()`: Returns entire matched string (contents of first capturing group)
+  - `match.groups()`: Return contents of all capturing groups in match
 - Finding all matches
-  - `re.findall(pattern, string)`: return all matches as a list of strings or tuples
+  - `re.findall(r"pattern", string)`: return all matches as a list of strings or tuples
     - If capturing groups in pattern will be tuple of their contents, else a string of the whole match
+
+##### Common Regex
+- `r"[^a-zA-Z]+"`: Match non-letters (good for splitting by word)
+- `r"\d+"`: Match integer
 
 ### List
 Python lists are mutable, ordered collections of items, backed by a resizable array
@@ -266,6 +272,7 @@ my_list.insert(0, 7) # insert 7 at index 0 (tc: o(n))
 my_list.remove(4) # remove first item equal to 4
 my_list.pop() # remove from end
 my_list.pop(0) # remove from index 0
+del my_list[1] # remove (and you don't care what the value is)
 
 my_list.clear()
 my_list.index(3) # get first index of item equal to 3
@@ -310,6 +317,20 @@ another_tuple = (1, ) # if tuple one item, needs trailing comma
 ```
 
 Because tuples are immutable they can be serialized which makes them useful for keying `dict`s, etc.
+
+#### Getting the 'inverse' of an iterable of tuples
+- We can get inverse of a iterable of tuples like: `new_list = zip(*my_list)`
+  - Turns `my_list = [(1, "a"), (2, "b")]` into `new_list = [(1, 2), ("a", "b")]`
+- Explanation:
+
+```python
+# say we have data like this
+data = [(1, "a"), (2, "b"), (3, "c")]
+# zip(*data) turns into:
+ndata = zip((1, "a"), (2, "b"), (3, "c"))
+# zip produces tuples with an item from each input tuple in each one
+ndata = [(1, 2, 3), ("a", "b", "c")]
+```
 
 #### Named Tuple
 `namedtuple()` creates tuple objects with named fields so fields can be accessed by index or name
@@ -393,8 +414,12 @@ my_dict.items() # get all key-value pairs
 "a" in my_dict  # efficient, o(1) check
 my_dict.get('e', 0) # get value for key 'e', return 0 if not found
 
-my_dict |= {'e': 5} # merge another dictionary (Python 3.9+)
+my_dict |= {"e": 5} # merge another dict
+my_dict.update({"e": 2}) # overwrite keys from another dict
+my_dict["e"] # = 2
 ```
+
+#### Dict Comprehension
 
 #### OrderedDict
 - Dictionaries are ordered by default: first key inserted is first in `.keys()` ordering
@@ -425,17 +450,21 @@ my_dict["abc"] # = []
 ```
 
 #### Counter
-- A counter counts hashable objects passed to its constructor, then can be interacted with just like a dict
+- A counter counts hashable objects and can be interacted with just like a dict
+  - Its constructor either takes an iterable (ex: list of items to count) or a mapping where the keys are the items and the values are the counts
 
 ```python
 from collections import Counter
 
+# Equivalent
 c = Counter([1, 1, 2, 3, 4])
-c # = Counter({1: 2, 2: 1, 3: 1, 4: 1})
+c = Counter({1: 2, 2: 1, 3: 1, 4: 1})
+
+c.update([2, 2, 3]) # add items to count (can iterable or mapping, like constructor)
+c.subtract(other_count) # subtract other_count
 
 c.most_common(2) # return 2 highest counts as (item, count) pairs
-c.subtract(other_count) # subtract other_count
-c.total() # return total count
+c.total() # return total count as an integer
 ```
 
 ### deque (pronounced deck)
@@ -1075,7 +1104,6 @@ my_class: MyProtocol = ConformingClass()
 ### SortedList
 
 ## Data Display
-
 ### Matplotlib
 
 - Create plot objects using `subplots()`:
@@ -1278,11 +1306,127 @@ div["id"] # Get attribute
 
 ## Parallelism
 ### Asyncio
-https://stackoverflow.com/questions/42231161/asyncio-gather-vs-asyncio-wait-vs-asyncio-taskgroup
+- Coopererative multitasking system, good for I/O bound tasks.
+- Coopererative means will only switch between tasks when the current task explicity gives up control
+
+#### Task and Coroutine Management
+
+- Run a coroutine asyncronously using a `Task`:
+
+```python
+# Create a task to run the given coroutine asynchronously
+task = asyncio.create_task(some_coroutine())
+
+# Do other stuff
+
+try:
+  print(await task) # Wait for task to complete and print result
+except:
+  print("Error!") # If error in coroutine, exception will be raised here
+
+task.cancel() # Or, we could cancel the task
+```
+
+- Managing multiple coroutines and `Tasks`:
+
+```python
+# Iterate over tasks as they complete
+#   You can also pass coroutines in the list, which will get automatically converted to tasks
+for task in asyncio.as_completed(tasks):
+  print(await task) # Get result of task
+
+# Return result of all tasks after they complete
+#   Like as_completed, you can also pass in coroutines
+#   return_exceptions=True returns exceptions from tasks in the result list versus being raised
+results = await asyncio.gather(*tasks, return_exceptions=True)
+print(results)
+```
+
+- Adding timeouts:
+
+```python
+# If the code inside the block takes more than 5s, a asyncio.TimeoutError is raised
+async with asyncio.timeout(5):
+  await some_coro()
+```
+
+#### Run event loop
+Create & run event loop (where `main` is top-level coroutine)
+
+```python
+asyncio.run(main())
+```
+
+#### Syncronousization Tools
+
+- Locks:
+
+```python
+lock = asyncio.Lock()
+
+async with lock:
+  # Critical section - only one coroutine can access at a time
+```
+
+- Semaphores:
+
+```python
+semaphore = asyncio.Semaphore(2)
+
+async with semaphore:
+  # Limited access section - 2 coroutines can access at a time
+```
+
+- Asyncronous queue (good for producer/consumer pattern):
+
+```python
+queue = asyncio.Queue()
+
+await queue.put(item)
+item = await queue.get()
+```
 
 ### Threading
+- Preemptive multitasking system, good for running I/O bound tasks without needing to explicity indicate when it can switch between them
+- Only one thread can run at a time, due to CPython's Global Interpreter Lock (GIL)
 
-### Parallelism
+```python
+import threading
+
+def worker(name):
+    print(f"Thread {name} is running")
+
+thread = threading.Thread(target=worker, args=("web server", ))
+thread.start() # Start thread
+thread.join() # Wait for the thread to finish
+```
+
+- Other threading features to know:
+  - Subclassing `Thread`
+  - Thread pools
+  - Syncronization primitives
+
+### Multiprocessing
+- True parallelism system which spawns multiple processes with independent memory spaces, bypassing the GIL
+- Since threads can run concurrently, great for CPU intensive tasks
+
+
+```python
+import multiprocessing
+
+def worker(name):
+    print(f"Process {name} is running")
+
+thread = multiprocessing.Process(target=worker, args=("web server", ))
+thread.start() # Start process
+thread.join() # Wait for the process to finish
+```
+
+- Other processing features to know:
+  - **`Queue` and `Manager` for inter-process communication**
+  - Subclassing `Process`
+  - Process pools
+  - Syncronization primitives
 
 ## Networking
 ### Making Requests
@@ -1323,7 +1467,7 @@ r.text # Response body as text
 r.json() # Response body, parsed as JSON
 ```
 
-#### Asynchronous API - AIOHTTP
+#### Asynchronous API - aiohttp
 
 - Create a client session (per application, usually):
 
@@ -1360,7 +1504,6 @@ async with session.get('http://httpbin.org/get', json=data, params=params) as re
 ```
 
 ### FastAPI and WSGI/ASGI
-
 Probably won't be in interviews.
 
 ## Modules, Packages, and Package Management
@@ -1387,6 +1530,7 @@ if __name__ == "__main__":
 ```
 
 ### Static analysis with `mypy`
+Probably won’t be in interviews.
 
 ## Documentation
 
@@ -1394,3 +1538,4 @@ if __name__ == "__main__":
 [Here are really good notes](https://github.com/python/cpython/blob/main/InternalDocs/README.md)
 
 ## Decorators
+Probably won’t be in interviews.

@@ -27,7 +27,7 @@ range(1, 3) # iterates from 1...2
 range(2, 0, -1) # iterates from 2...1
 ```
 
-#### Enumerate Function
+##### Enumerate Function
 Turns an iterator into another iterator of tuples of (index, value of original iterator):
 
 ```python
@@ -63,7 +63,6 @@ else:
 ```
 
 ### Assignment
-
 #### Walrus Operator
 `:=` allows us to assign a value to a variable as part of an expression:
 
@@ -284,6 +283,28 @@ my_list.reverse() # reverse list
 
 #### List Comprehension
 
+List comprehensions are made of 2 or 3 components:
+
+```python
+fizz_buzz_squares = [
+    num ** 2                             # Data transformation (what actually goes in list)
+    for num in range(10)                 # Data source (any iterable)
+    if (num % 3 == 0) or (num % 5 == 0)  # Data filter (optional)
+]
+```
+
+Often written on one line, like:
+
+```python
+element_names = [ el["name"] for el in elements ]
+```
+
+Can do more complicated comprehensions, although this gets confusing:
+
+```python
+flattened = [exc for sub in exceptions for exc in sub] 
+```
+
 #### List Slicing, Indexing
 - Can index from the start or back (zero-indexed):
 
@@ -420,6 +441,19 @@ my_dict["e"] # = 2
 ```
 
 #### Dict Comprehension
+
+Like with lists, dict comprehensions are made of 2 or 3 components:
+
+```python
+parts = ["CPU", "GPU", "Motherboard"]
+stocks = [15, 8, 12]
+
+inventory = [
+    part: qty                            # Data transformation (what actually goes in dict)
+    for part, qty in zip(parts, stocks)  # Data source (any iterable)
+    if qty > 0                           # Data filter (optional)
+]
+```
 
 #### OrderedDict
 - Dictionaries are ordered by default: first key inserted is first in `.keys()` ordering
@@ -1456,7 +1490,6 @@ r = requests.post("https://myapi.com/endpoint", headers=headers, data=data, para
 
 ```python
 r.status_code # HTTP status code
-r.status_code == requests.codes.ok # Evaluates to True if request OK
 
 r.raise_for_status() # Will raise relevant error if response != OK
 

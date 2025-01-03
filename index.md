@@ -1554,6 +1554,20 @@ async with session.get('http://httpbin.org/get', json=data, params=params) as re
 Probably won't be in interviews.
 
 ## Modules, Packages, and Package Management
+- A Python **module** is a file containing python code
+  - You can import any module into another using an `import modulename` statement
+- A **package** is a collection of python modules organized into directories
+  - The existance of a `__init__.py` file denotes a directory as a package
+- You can install external packages (dependencies) with **pip**
+  - Ex: `pip install matplotlib`
+- You can isolate dependencies for different projects using virtual enviroments:
+  - To make a venv, run `python -m venv myenv` in your project's folder
+  - To activate a venv (do before using pip), run: `source myenv/bin/activate`
+  - To deactivate, run: `deactivate`
+- To manage dependencies systematically generate a `requirements.txt`
+  - To generate this: `pip freeze > requirements.txt`
+  - To install dependencies from it: `pip install -r requirements.txt`
+  - Then, `.gitignore` the venv folder
 
 ## Testing
 ### Testing with `unittest`

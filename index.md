@@ -1597,10 +1597,18 @@ async def main():
 data = {"key": "value"} # Request body
 params = {"key1": "value1"} # URL params, etc: /get?key1=value1
 
-async with session.get('http://httpbin.org/get', json=data, params=params) as resp:
+async with session.post('http://httpbin.org/post', json=data, params=params) as resp:
   print(resp.status) # HTTP status code
   print(await resp.text()) # Response body as text
   print(await resp.json()) # Response body parsed as JSON
+```
+
+- Or, can make a request without a context manager:
+
+```python
+resp = async session.get('http://httpbin.org/get')
+print(await resp.json())
+resp.close()
 ```
 
 ### FastAPI and WSGI/ASGI

@@ -1132,6 +1132,59 @@ my_class: MyProtocol = ConformingClass()
 
 ## Errors/Exceptions
 - There are two types of error: syntax errors and exceptions
+- You can raise an exception to indicate a runtime error:
+
+```python
+def my_fn(count: int):
+  if count < 0:
+    raise ValueError("Bad count!")
+```
+
+- Common built-in exception include: `IndexError`, `KeyError`, `ValueError`
+- You can also define custom exceptions:
+
+```python
+# Convention is to end all exception names with 'error'
+class SqlError(Exception):
+  pass
+```
+
+- Use a try...catch statement to handle exceptions:
+
+```python
+try:
+  # Code that may raise an exception
+  # Below will raise a ValueError
+  num = int("abc")
+except TypeError as e: # Can access exception object
+  print(f"Caught a TypeError: {e}")
+except ValueError:
+  print("Caught a ValueError")
+except Exception:
+  print("Caught a generic exception")
+```
+
+- Python matches the raised exception with the first except block that fits
+  - So in the above example, 'Caught a ValueError' would be printed
+- You can also catch multiple exceptions in one block
+
+```python
+try:
+  result = int("abc")
+except (ValueError, TypeError) as e:
+  print(f"Error occurred: {e}")
+```
+
+- Lastly, you can use a finally block which executes regardless of whether an exception was raised or if there was a return in try or except blocks:
+
+```python
+try:
+  file = open("file.txt")
+except FileNotFoundError as e:
+  print(f"Error occurred: {e}")
+finally:
+  file.close()
+```
 
 ## External Data Structure Libraries
 ### SortedContainers

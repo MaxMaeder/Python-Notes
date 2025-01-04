@@ -1614,6 +1614,33 @@ if __name__ == "__main__":
 - Invoke: `mypy file.py` 
 
 ## Documentation
+Non-trivial methods should have docstrings.
+
+Example: docstring following the Google style
+
+```python
+def assign_tables(student_ids: list[int], num_tables: int) -> list[list[int]]:
+  """Assigs students to tables and generates a seating chart per table.
+
+  Sequentially assigns students by id (low to high) around a table before moving on
+  to the next table, ensuring each table has the same number of students.
+
+  Params:
+    student_ids: list of student IDs
+    num_tables: number of tables
+
+  Returns:
+    A list, where list element i represents the seating chart for the ith table.
+    Each seating chart is also a list, where element j represents the ID of the jth
+    student to sit at that table.
+
+  Raises:
+    ValueError: it is not possible to seat the same amount of students at each table
+  """
+  ...
+```
+
+[Google style guide](https://google.github.io/styleguide/pyguide.html)
 
 ## Interpreter details
 [Here are really good notes](https://github.com/python/cpython/blob/main/InternalDocs/README.md)

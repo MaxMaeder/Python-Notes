@@ -413,6 +413,7 @@ a.isdisjoint(b) # True if a and b share no items
   - By default, python will use a hash function based on the object's ID
   - If `__eq__` is specified, you need to implement `__hash__` otherwise a `TypeError` is raised
     - A hash function should produce the same output if two objects are equal, so since we overrode the default `__eq__`, we can't use the default `__hash__` anymore
+  - To make a hash function that depends on multiple instance attributes, you can do: `hash((val1, val2, etc))`
 - You should only be able to hash immutable objects, otherwise the invariant that the same object produces the same hash would be broken
 
 ### Dict

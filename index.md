@@ -1633,12 +1633,21 @@ parser.add_argument("filename", help="Name of the file to process")
 
 # Add optional arguments
 # Use: progname --compression 5
-parser.add_argument("--compression", help="Compression level")
+parser.add_argument("--label", help="Custom label")
 
 # This optional argument has a shorthand
-#   "store_true" makes it work as flag, so if arg present verbose==True
+# In addition, 'store_true' makes it work as flag, 
+#   so if '-v' or '--verbose' present: args.verbose==True
 # Use: progname -v or progname --verbose
 parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose mode")
+
+# You can also specify a parser with 'type', otherwise the arguments will be parsed as strings
+parser.add_argument("--compression", help="Compression level", type=int)
+
+# You can even create your own parser
+def parse_date(raw_date: str) -> date:
+  return date.fromisoformat(raw_date)
+parser.add_argument("startdate", type=parse_date)
 
 # Parse the arguments
 args = parser.parse_args()

@@ -1385,8 +1385,8 @@ Parsing a document:
 from bs4 import BeautifulSoup
 
 # Can parse from a file pointer or a string
-soup = BeautifulSoup(fp)
-soup = BeautifulSoup("<html>data</html>")
+soup = BeautifulSoup(fp, "html.parser")
+soup = BeautifulSoup("<html>data</html>", "html.parser")
 ```
 
 Searching a document tree:
@@ -1412,6 +1412,8 @@ matched_divs = soup.find_all("div", class_=pattern)
 body.find_all("p", recursive=False)
 
 # Get a tag's children
+# Children include other tags, and strings (in which case child.name == None)
+#   Ex: '<p>Here <a>you go</a></p>' = 2 children
 body.contents # list of children
 body.children # iterator over children
 

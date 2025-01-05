@@ -236,6 +236,25 @@ s.strip() # Remove leading & trailing whitespace (also: lstrip, rstrip)
 s.upper() # Make string uppercase (also: lower)
 ```
 
+#### F-Strings
+F-strings allow you to easily embed expressions in strings:
+
+```python
+from datetime import date
+
+name = "Max"
+date = date(2002, 12, 31) # implicitly calls __str__ on object when embedding into a fstr
+
+print(f"{name} check-in day {date}")
+```
+
+You can also easily format floating point numbers in strings:
+
+```python
+one_third = 1 / 3
+print(f"{one_third:.2}") # prints 2 decimal places
+```
+
 #### Regex
 The `re` module provides Regex support.
 

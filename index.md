@@ -1212,6 +1212,10 @@ finally:
   - Each supports all methods of its non-sorted counterpart
   - Each are sorted by comparing the item (or for SortedDict, by key)
 
+#### SortedList method differences
+- `List.append(item)` -> `SortedList.add(item)`
+- `List.extend(other)` -> `SortedList.update(other)`
+
 #### Additional SortedSet methods
 - `SortedSet.index(item)`: index of item in set, or -1
 
@@ -1247,7 +1251,7 @@ ax.bar(categories, values)
 
 # Histogram
 data = [1, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7]
-bins = 5
+bins = 5 # number of bins, ex: bins = max(data) - min(data) + 1
 ax.hist(data, bins=bins)
 ```
 
@@ -1761,6 +1765,79 @@ def assign_tables(student_ids: list[int], num_tables: int) -> list[list[int]]:
 ```
 
 [Google style guide](https://google.github.io/styleguide/pyguide.html)
+
+## SQL
+### Querying rows
+
+```sql
+-- SELECT clause: which columns to return
+-- * selects all
+SELECT * FROM users;
+SELECT id, user_name FROM users;
+
+-- WHERE clause: filter rows based on conditions
+SELECT * FROM users WHERE age > 25;
+SELECT * FROM users WHERE id = 'abc123';
+
+-- ORDER BY clause: 
+SELECT * FROM users ORDER BY age DESC;
+SELECT * FROM users ORDER BY age ASC;
+
+-- GROUP BY: group rows sharing a property
+-- works kind of like a foreach
+-- Example: how many employeees are in each department?
+SELECT department, COUNT(*) FROM employees GROUP BY department;
+-- Example: how much money did we pay each employee?
+SELECT id, SUM(monthy_salary) FROM employee_salary GROUP BY id;
+
+-- HAVING: filter grouped data
+-- Example: how many employeees are in each large department?
+SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 10;
+
+-- INNER JOIN: join together rows from different tables which satify some condition (ON clause)
+-- Example: what is the user name corresponding to each order amount?
+SELECT users.name, orders.amount FROM users INNER JOIN orders ON users.id = orders.user_id;
+
+-- LIMIT: limit how many rows can be returned for a query
+SELECT * FROM users LIMIT 10;
+
+-- Agerate functions
+-- COUNT: count number of rows
+SELECT COUNT(*) FROM users;
+-- SUM/AVG/MAX/MIN: work on numberical values, self explanatory
+SELECT SUM(salary) FROM employees;
+SELECT AVG(salary) FROM employees;
+SELECT MAX(salary) FROM employees;
+```
+
+### Accessing a DB from Python
+
+```python
+import mysql.connector
+
+cnx = mysql.connector.connect(
+    host="127.0.0.1",
+    port=3306,
+    user="mike",
+    password="s3cre3t!")
+
+cur = cnx.cursor()
+cur.execute("SELECT * FROM users WHERE id = 12 AND active = true")
+
+row = cur.fetchone() # Fetch one row
+print("Row contents:", ",".join(row))
+```
+
+### Modifing rows
+
+```sql
+-- Insert row
+INSERT INTO table_name (column1, column2) VALUES (value1, value2);
+-- Update column1 in rows matching condition
+UPDATE table_name SET column1 = value1 WHERE condition;
+-- Delete rows matching condition
+DELETE FROM table_name WHERE condition;
+```
 
 ## Interpreter details
 [Here are really good notes](https://github.com/python/cpython/blob/main/InternalDocs/README.md)

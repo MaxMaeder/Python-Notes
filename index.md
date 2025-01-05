@@ -1291,6 +1291,7 @@ with open("test.csv") as file:
     print(", ".join(line))
 ```
 
+- NOTE: Each parsed element in a `line` will always be a `str`, even if it's a numerical value
 - Write to a CSV:
 
 ```python
@@ -1311,6 +1312,7 @@ with open("test.csv", "w", newline="") as file:
   writer.writerows(write_test)
 ```
 
+- We need `newline=""` when we are going to write to csv, otherwise some weird issues related to how python handles line endings on different platforms will occur
 - Read/Write to a CSV from a dict:
 
 ```python
@@ -1326,8 +1328,10 @@ with open("test_dict.csv", "w", newline="") as file:
 with open("test_dict.csv") as file:
   reader = csv.DictReader(file)
   for line in reader:
-    print(line) # = {"Name": "Max", "Age": 20}
+    print(line) # = {"Name": "Max", "Age": "20"}
 ```
+
+- Similarly, each value in the dict `line` will always be a `str`, even if it's a numerical value
 
 ### JSON
 
@@ -1614,6 +1618,32 @@ resp.close()
 
 ### FastAPI and WSGI/ASGI
 Probably won't be in interviews.
+
+## CLI Interfaces - argparse
+- The `argparse` module parses command-line arguments.
+
+```python
+# Create an argparse object
+import argparse
+parser = argparse.ArgumentParser(description="A simple tool.")
+
+# Add positional arguments
+# Use: progname file.txt
+parser.add_argument("filename", help="Name of the file to process")
+
+# Add optional arguments
+# Use: progname --compression 5
+parser.add_argument("--compression", help="Compression level")
+
+# This optional argument has a shorthand
+#   "store_true" makes it work as flag, so if arg present verbose==True
+# Use: progname -v or progname --verbose
+parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose mode")
+
+# Parse the arguments
+args = parser.parse_args()
+print(args.filename, args.compression, args.verbose)
+```
 
 ## Modules, Packages, and Package Management
 - A Python **module** is a file containing python code
